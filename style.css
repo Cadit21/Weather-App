@@ -1,0 +1,110 @@
+body{
+    background: url('back.jpg');
+    background-repeat: no-repeat;
+    background-size: cover;
+   
+}
+
+.main-container{
+    display: flex;
+    justify-content: center;
+    margin-top: 10%;
+    
+}
+
+.container-1{
+    background: rgba(109, 108, 108, 0.4); /* Grey with 40% opacity */
+    width: fit-content;
+    padding-left: 50px;
+    padding-right: 50px;
+    border: 2px solid gray;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+}
+.container-1 .date .day{
+
+    font-size: xx-large;
+    line-height: 0%;
+}
+
+.date .date2{
+    line-height: 0%;
+}
+.container-1 img{
+    margin-top: 30px;
+
+}
+
+img{
+    width: 80px;
+    height: 80px;
+}
+.container-2{
+    background-color: rgba(50, 48, 48, 0.4);
+    border: 2px solid gray;
+    border-radius: 20px;
+    width: 20%;
+    padding: 30px;
+    color: white;
+}
+.data{
+    margin-right: 20px;
+    
+}
+.name{
+    display: flex;
+    justify-content: space-between;
+}
+.container-2 button{
+    padding: 10px;
+    width: 20%;
+}
+.container-2 input{
+    padding:10px;
+    width: 70%;
+    background: none;
+    color: black;
+}
+.container-2 input::placeholder {
+    color: white; /* Set this to a color that contrasts with the input background */
+    opacity: 1;  /* Ensures the placeholder is fully opaque */
+}
+
+.weather{
+    margin-top: 30px;
+    text-align: center;
+}
+.container-1 .temp{
+    font-size: xx-large;
+    line-height: 0;
+}
+.container-1 .condition{
+    font-size: x-large;
+}
+
+@media screen and (max-width: 768px) {
+    .container-2 input {
+        width: 70%; /* Makes the input field full width on smaller screens */
+       
+        color: white; /* Changes text color on smaller screens */
+    }
+    .container-2{
+        width: 100%;
+        padding: 0;
+        padding-top: 30px;
+        padding-bottom: 30px;
+    }
+
+    .container-1{
+        width: 100%;
+        padding-right: 0;
+        padding-left: 0;
+    }
+    .main-container{
+        flex-direction: column;
+        align-items: center;
+    }
+}
