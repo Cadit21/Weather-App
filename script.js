@@ -1,6 +1,7 @@
 const apiKey = '1fca1085d139a85b345015455592e895';  // Your API key
 
 // Function to fetch weather data
+// Function to fetch weather data
 async function fetchWeather(city) {
     const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
 
@@ -29,7 +30,6 @@ function updateWeather(weatherData) {
     // Update day and date
     document.querySelector('.day').innerHTML = weekdays[date.getDay()];
     document.querySelector('.date2').innerHTML = `${date.getDate()} ${months[date.getMonth()]} ${date.getFullYear()}`;
-        
 
     // Update temperature and other weather details
     if (weatherData) {
@@ -40,15 +40,15 @@ function updateWeather(weatherData) {
         document.querySelector('.condition').innerHTML = weatherData.weather[0].main;
         document.querySelector('.humid').innerHTML = weatherData.main.humidity + '%';
         document.querySelector('.w-speed').innerHTML = `${weatherData.wind.speed} m/s`;
-        let cond= weatherData.weather[0].main;
-        let ele=document.querySelector('.condition-img');
+        let cond = weatherData.weather[0].main;
+        let ele = document.querySelector('.condition-img');
         console.log(cond);
         if (ele) {  // Check if the element exists
             if (cond == 'Rain') {
                 ele.src = 'rain.png';
             } else if (cond == 'Clouds') {
                 ele.src = 'cloudy.png';
-            } else if (cond == 'Partly Clouds') {
+            } else if (cond == 'Partly Cloudy') {
                 ele.src = 'partly.png';
             } else {
                 ele.src = 'sun.png';
@@ -56,13 +56,12 @@ function updateWeather(weatherData) {
         } else {
             console.error('No weather element found');
         }
-        
-}
+    }
 }
 
 // Function to get city name from coordinates using OpenWeatherMap Geocoding API
 async function findGeo(lat, lon, limit = 1) {
-    const url = `http://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${apiKey}`;
+    const url = `https://api.openweathermap.org/geo/1.0/reverse?lat=${lat}&lon=${lon}&limit=${limit}&appid=${apiKey}`;
 
     try {
         const response = await fetch(url);
@@ -103,16 +102,13 @@ document.querySelector('button').addEventListener('click', async (evnt) => {
     let inputElement = document.querySelector('input');
     let inputType = inputElement.value;
 
-    // Display the city name
-    
     // Fetch the weather data and update the DOM
     const weatherData = await fetchWeather(inputType);
-    if(weatherData){
+    if (weatherData) {
         document.querySelector('.city').innerHTML = inputType;
         updateWeather(weatherData);
-    }
-    else{
-        alert('Place Not Found!')
+    } else {
+        alert('Place Not Found!');
     }
 });
 
@@ -127,5 +123,7 @@ async function fetchWeatherByLocation(lat, lon) {
     }
 }
 
-// Example usage with coordinates (New Delhi, India)
-fetchWeatherByLocation(28.6139, 77.2090);
+// Ensure fetchWeatherByLocation is called after the DOM is fully loaded
+window.onload = () => {
+    fetchWeatherByLocation(28.6139, 77.2090); // Example usage with coordinates (New Delhi, India)
+};
