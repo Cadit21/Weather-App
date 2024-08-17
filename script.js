@@ -1,5 +1,8 @@
 const apiKey = '1fca1085d139a85b345015455592e895';  // Your API key
 
+
+
+
 // Function to fetch weather data
 // Function to fetch weather data
 async function fetchWeather(city) {
@@ -13,6 +16,7 @@ async function fetchWeather(city) {
         }
 
         const result = await response.json();
+        
         return result;
 
     } catch (error) {
@@ -20,6 +24,115 @@ async function fetchWeather(city) {
         return null;
     }
 }
+async function fetchWeather2(city) {
+
+    const url = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+
+    try {
+        const response = await fetch(url);
+
+        if (!response.ok) {
+            throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const result = await response.json();
+        console.log(result);
+        return result;
+        
+
+    } catch (error) {
+        console.error('Error fetching weather data:', error);
+        return null;
+    }
+}
+fetchWeather2('Delhi');
+// Assuming fetchWeather2 is an async function that fetches weather data
+async function updatenextdaysWeather(city) {
+    // Fetch weather data
+    const next = await fetchWeather2(city);
+
+    // Initialize variables
+    let currentDay = new Date(next.list[0].dt_txt).getDate();
+    let tempSum = 0;
+    let count = 0;
+    const nextFiveDaysTemps = [];
+    const nextFiveDays=[];
+    const cond=[];
+    const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
+    // Iterate through the weather data
+    next.list.forEach(item => {
+        const itemDate = new Date(item.dt_txt);
+        const itemDay = itemDate.getDate();
+        const day= itemDate.getDay();
+        const val= item.main.temp;
+        const cond2= item.weather[0].main;
+        
+        
+
+        if (itemDay !== currentDay) {
+            // Calculate average temperature for the previous day
+            nextFiveDaysTemps.push(val);
+            nextFiveDays.push(itemDate.getDay());
+            cond.push(cond2)
+            currentDay = itemDay;
+           
+            
+           
+        }
+
+        
+    });
+
+    // Add the last day's average temperature
+    
+
+    // Get the first 5 days of temperature
+    const result = nextFiveDaysTemps.slice(0, 5);
+    const result2= nextFiveDays.slice(0,5);
+    const condition= cond.slice(0,5);
+
+    condition.forEach((con,idx)=>{
+
+        let ele = document.querySelector(`.box .img${idx + 1}`);
+        console.log(con);
+        if (ele) {
+            if (con === 'Rain') {
+                ele.src = 'rain.png';
+            } else if (con === 'Clouds') {
+                ele.src = 'cloudy.png';
+            } else if (con === 'Partly Cloudy') {
+                ele.src = 'partly.png';
+            } else {
+                ele.src = 'sun.png';
+            }
+        } else {
+            console.error('No weather element found');
+        }
+        
+
+    });
+
+    result2.forEach((temp, index) => {
+        let ele = document.querySelector(`.box .day${index + 1}`);
+        if (ele) {
+            ele.innerHTML = weekdays[temp];
+        }
+        });
+
+    // Update the DOM elements with the temperatures
+    result.forEach((temp, index) => {
+        let ele = document.querySelector(`.box .temp${index + 1}`);
+        let img= document.querySelector(`.box .img${index + 1}`);
+        
+        if (ele) {
+            ele.textContent = `${(temp-273).toFixed(2)}°C`;
+            
+            
+        }
+    });
+}
+
 
 // Function to update the DOM with weather data
 function updateWeather(weatherData) {
@@ -34,6 +147,7 @@ function updateWeather(weatherData) {
     // Update temperature and other weather details
     if (weatherData) {
         console.log(weatherData);
+       
         let temperatureCelsius = weatherData.main.temp - 273.15;
         document.querySelector('.temp').innerHTML = `${temperatureCelsius.toFixed(2)}°C`;
         document.querySelector('.degree').innerHTML = `${temperatureCelsius.toFixed(2)}°C`;
@@ -51,6 +165,8 @@ function updateWeather(weatherData) {
             } else if (cond == 'Partly Cloudy') {
                 ele.src = 'partly.png';
             } else {
+
+                
                 ele.src = 'sun.png';
             }
         } else {
@@ -107,6 +223,7 @@ document.querySelector('button').addEventListener('click', async (evnt) => {
     if (weatherData) {
         document.querySelector('.city').innerHTML = inputType;
         updateWeather(weatherData);
+        updatenextdaysWeather(inputType);
     } else {
         alert('Place Not Found!');
     }
@@ -125,5 +242,6 @@ async function fetchWeatherByLocation(lat, lon) {
 
 // Ensure fetchWeatherByLocation is called after the DOM is fully loaded
 window.onload = () => {
-    fetchWeatherByLocation(28.6139, 77.2090); // Example usage with coordinates (New Delhi, India)
+    fetchWeatherByLocation(28.6139, 77.2090);
+    updatenextdaysWeather('Delhi') // Example usage with coordinates (New Delhi, India)
 };
