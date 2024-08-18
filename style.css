@@ -2,7 +2,7 @@ body{
     background: url('back.jpg');
     background-repeat: no-repeat;
     background-size: cover;
-    height: 100vh;
+    
    
 }
 
@@ -108,6 +108,7 @@ img{
 }
 
 
+
 @media screen and (max-width: 768px) {
     .container-2 input {
         width: 70%; /* Makes the input field full width on smaller screens */
@@ -132,4 +133,14 @@ img{
         flex-direction: column;
         align-items: center;
     }
+    #remove{
+        display: none;
+    }
 }
+@media screen and (min-height: 859px){
+    body{
+        height: 100vh;
+    }
+}
+    
+
